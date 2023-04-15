@@ -1,0 +1,147 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class ArcherAttack : MonoBehaviour
+{
+    // All the require Components
+    [HideInInspector] public Animator anim;
+    private float moveHorizontal;
+
+    [Header("Ground Checker")]
+    [SerializeField] private BoxCollider2D checkCollision;
+    [SerializeField] [Range(0.1f, 0.3f)] private float rayBuffer = 0.2f;
+
+    [Header("Layer Mask")]
+    public LayerMask jumpableGround;
+
+   
+
+    private void Start()
+    {  
+        anim = GetComponent<Animator>();
+    }
+
+    // Update is called once per frame
+    private void Update()
+    {
+        moveHorizontal = Input.GetAxisRaw("Horizontal");
+        MoveHitbox();
+        UpdateAnimationAttack();
+    }
+
+    #region Requirement
+
+    public static ArcherAttack instance;
+    // For combo attack
+    private void Awake()
+    {
+        instance = this;
+    }
+
+    // Check the ground to attack
+    private bool isGround()
+    {
+        return Physics2D.BoxCast(checkCollision.bounds.center, checkCollision.bounds.size, 0f, Vector2.down, rayBuffer, jumpableGround);
+    }
+
+    // Move the hitbox accorrding to player direction
+    private void MoveHitbox()
+    {
+        if (moveHorizontal > 0f )
+        {
+            attack1Point.localPosition = new Vector2(1.38f, attack1Point.transform.localPosition.y);
+            attack2Point.localPosition = new Vector2(1.9f, attack2Point.transform.localPosition.y);
+            bowShoot.localPosition = new Vector2(1f, attack1Point.transform.localPosition.y);
+        }
+        if (moveHorizontal < 0f )
+        {
+            attack1Point.localPosition = new Vector2(-1.38f, attack1Point.transform.localPosition.y);
+            attack2Point.localPosition = new Vector2(-1.9f, attack2Point.transform.localPosition.y);
+            bowShoot.localPosition = new Vector2(-2f, attack1Point.transform.localPosition.y);
+        }
+    }   
+    
+    // Show the hitbox on the screen
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.DrawWireSphere(attack1Point.position, attack1Range);
+        Gizmos.DrawWireCube(attack2Point.position, new Vector2(attack2Range, 1.7f));
+    }
+
+    #endregion
+
+    #region Attack 
+
+    [Header("Light Attack stats")]
+    [SerializeField] private float attack1Rate = 0.5f;
+    [SerializeField] private float attack1Range = 2.4f;
+    [SerializeField] private Transform attack1Point;
+    public bool isAttacking1 = false;
+
+    [Header("Heavy Attack stats")]
+    [SerializeField] private float attack2Rate = 0.8f;
+    [SerializeField] private float attack2Range = 4f;
+    [SerializeField] private Transform attack2Point;
+    public bool isAttacking2 = true;
+
+    [Header("Range Attack stats")]
+    [SerializeField] private float rangeAttackRate = 1f;
+    [SerializeField] private Transform bowShoot;
+    [SerializeField] private GameObject arrow;
+
+    private float nextTimeAttack1 = 0f;
+    private float nextTimeAttack2 = 0f;
+    private float nextTimeRange = 0f;
+
+    private void AttackResult(Collider2D[] trigger)
+    {
+        foreach (Collider2D enemy in trigger )
+        {
+            if (enemy.gameObject.layer == 6)
+            {
+                Debug.Log("Hit Sucesss");
+            } 
+        }
+    }
+
+    private void UpdateAnimationAttack()
+    {
+        // If the player in on the ground and trigger then attack
+        if (Input.GetButtonDown("LightAttack") && isGround() && !isAttacking1)
+        {
+            // Deylay time between attack so player don't spam
+            if (Time.time >= nextTimeAttack1) 
+            {
+                isAttacking1 = true;
+                AttackResult(Physics2D.OverlapCircleAll(attack1Point.position, attack1Range));
+                nextTimeAttack1 = Time.time + attack1Rate;   
+            } 
+        }
+        
+
+        if (Input.GetButtonDown("HeavyAttack") && isGround())
+        {
+            if (Time.time >= nextTimeAttack2)
+            {
+                isAttacking2 = true;
+                AttackResult(Physics2D.OverlapBoxAll(attack2Point.position, new Vector2(attack2Range,1.7f), 0f));
+                nextTimeAttack2 = Time.time + attack2Rate;
+            }
+        }
+
+        if (Input.GetButtonDown("Range") && isGround())
+        {
+            if (Time.time >= nextTimeRange)
+            {
+                anim.SetTrigger("Range");
+                Instantiate(arrow, bowShoot.position, transform.rotation);
+                nextTimeRange = Time.time + rangeAttackRate;
+            }
+        }
+
+    }
+
+    #endregion
+}
+
