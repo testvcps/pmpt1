@@ -5,6 +5,7 @@ using UnityEngine;
 public class CommanderMovement : MonoBehaviour
 {
     // All the require Components
+    public HealthDecrease health;
     private Rigidbody2D rb2D;
     private Animator  anim;
     private SpriteRenderer characterSprite;
@@ -47,29 +48,37 @@ public class CommanderMovement : MonoBehaviour
         // Turn the character to the right from the left
         if (moveHorizontal > 0 && !isFacingRight)
         {
-            isFacingRight = !isFacingRight;
-            transform.Rotate(0f, 180f, 0f);
+            if(health.die == false){
+                isFacingRight = !isFacingRight;
+                transform.Rotate(0f, 180f, 0f);
+            }
         }
         // and reverse
         else if (moveHorizontal < 0 && isFacingRight)
         {
-            isFacingRight = !isFacingRight;
-            transform.Rotate(0f, 180f, 0f);
+            if(health.die == false){
+                isFacingRight = !isFacingRight;
+                transform.Rotate(0f, 180f, 0f);
+            }
         }
 
         // Switch between walk and run speed
         if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
         {
-            rb2D.velocity = new Vector2(moveHorizontal * walkSpeed, rb2D.velocity.y);
+            if(health.die == false){
+                rb2D.velocity = new Vector2(moveHorizontal * walkSpeed, rb2D.velocity.y);
+            }
         }
         else
-        {
-            rb2D.velocity = new Vector2(moveHorizontal * runSpeed, rb2D.velocity.y);
+        {   if(health.die == false){
+                rb2D.velocity = new Vector2(moveHorizontal * runSpeed, rb2D.velocity.y);
+            }
         }
 
         if (Input.GetButtonDown("Jump") && isGround())
-        {
-            rb2D.velocity = new Vector2(0, jumpForce);
+        {   if(health.die == false){
+                rb2D.velocity = new Vector2(0, jumpForce);
+            }
         }
     }
 
