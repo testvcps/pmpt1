@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class HealthDecrease : MonoBehaviour
 {
@@ -19,12 +20,13 @@ public class HealthDecrease : MonoBehaviour
         //healthBar = GetComponent<HealthBar>();
         // healthBar.SetMaxHealth(MaximumHealth);
         currentHealth = MaximumHealth;
+        DisableAllText();
     }
 
     // Update is called once per frame
     void Update()
     {
-
+      EnableText();
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -40,43 +42,64 @@ public class HealthDecrease : MonoBehaviour
             healthBar.TakeDamage(25);
             healthnow-=25;
             DeadChecker(healthnow);
+            if (die==true){
+               condition =2;
+            }
             Debug.Log("-25");
          }
          else if (collision.tag == "Catk2"){
             healthBar.TakeDamage(35);
             healthnow-=35;
             DeadChecker(healthnow);
+            if (die==true){
+               condition =2;
+            }
             Debug.Log("-35");
          }
          else if (collision.tag == "Catk3"){
             healthBar.TakeDamage(50);
             healthnow-=50;
             DeadChecker(healthnow);
+            if (die==true){
+               condition =2;
+            }
             Debug.Log("-50");
          }
          else if (collision.tag == "Aatk1"){
             healthBar.TakeDamage(15);
             healthnow-=15;
             DeadChecker(healthnow);
+            if (die==true){
+               condition =1;
+            }
             Debug.Log("-15");
          }
          else if (collision.tag == "Aatk2"){
             healthBar.TakeDamage(23);
             healthnow-=23;
             DeadChecker(healthnow);
+            if (die==true){
+               condition =1;
+            }
             Debug.Log("-23");
          }
          else if (collision.tag == "Aatk3"){
             healthBar.TakeDamage(35);
             healthnow-=35;
             DeadChecker(healthnow);
+            if (die==true){
+               condition =1;
+            }
             Debug.Log("-35");
          }
          else if (collision.tag == "Aarrow"){
-            healthBar.TakeDamage(290);
-            healthnow-=290;
+            healthBar.TakeDamage(70);
+            healthnow-=70;
             DeadChecker(healthnow);
-            Debug.Log("-70"+ healthnow);
+            if (die==true){
+               condition =1;
+            }
+            Debug.Log("-70"+ condition);
          }
     }
     void TakeDamage(int dmg){
@@ -92,7 +115,27 @@ public class HealthDecrease : MonoBehaviour
             anim.SetTrigger("die");
         }
     }
-    void Wincondition(){
-        
-    }
+   public Text ArcherWin;  //Add reference to UI Text here via the inspector
+   public Text CommanderWin;
+
+   private float timeToAppear = 2f;
+   private float timeWhenDisappear = 2f;
+   
+   private int condition = 0;
+//Call to enable the text, which also sets the timer
+   public void EnableText()
+   { 
+      if(condition == 1){
+         ArcherWin.enabled = true;
+         timeWhenDisappear = Time.time + timeToAppear;
+      }
+      if(condition == 2){
+         CommanderWin.enabled = true;
+         timeWhenDisappear = Time.time + timeToAppear;
+      }
+   }
+   public void DisableAllText(){
+      ArcherWin.enabled = false;
+      CommanderWin.enabled = false;
+   }
 }

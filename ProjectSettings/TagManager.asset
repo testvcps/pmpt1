@@ -15,6 +15,7 @@ TagManager:
   - Aarrow
   - Trap
   - Ground
+  - BCommander
   layers:
   - Default
   - TransparentFX

@@ -14,13 +14,20 @@ public class CommanderAttack : MonoBehaviour
     [Header("Ground Checker")]
     [SerializeField] private BoxCollider2D checkCollision;
 
+    [SerializeField] [Range(0.1f, 0.3f)] private float rayBuffer = 0.2f;
+
+
     [Header("Layer Mask")]
     public LayerMask jumpableGround;
+    //private GameController gameController;
+    //[SerializeField] private string playername;
+    [SerializeField] private string enermyname;
 
     private void Start()
     {  
         anim = GetComponent<Animator>();
         deActivateAllatk();
+        //GameController.gameController.enemyName.text = enermyname;
     }
 
     // Update is called once per frame
@@ -43,7 +50,7 @@ public class CommanderAttack : MonoBehaviour
     // Check the ground to attack
     private bool isGround()
     {
-        return Physics2D.BoxCast(checkCollision.bounds.center, checkCollision.bounds.size, 0f, Vector2.down, jumpableGround);
+        return Physics2D.BoxCast(checkCollision.bounds.center, checkCollision.bounds.size, 0f, Vector2.down, rayBuffer, jumpableGround);
     }
     
     
@@ -134,7 +141,8 @@ public class CommanderAttack : MonoBehaviour
             if (Time.time >= nextTimeAttack1) 
             {
                 isAttacking1 = true;
-            } 
+            }
+            deActivateAllatk(); 
         }
         
         if (Input.GetButtonDown("HeavyAttack") && isGround())
@@ -143,6 +151,7 @@ public class CommanderAttack : MonoBehaviour
             {
                 isAttacking2 = true;
             }
+            deActivateAllatk();
         }
 
     }
