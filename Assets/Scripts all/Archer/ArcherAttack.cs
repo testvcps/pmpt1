@@ -121,7 +121,8 @@ public class ArcherAttack : MonoBehaviour
             if (Time.time >= nextTimeAttack1) 
             {
                 isAttacking1 = true;  
-            } 
+            }
+            deActivateAllatk(); 
         }
         
         if (Input.GetButtonDown("HeavyAttack") && isGround())
@@ -130,6 +131,7 @@ public class ArcherAttack : MonoBehaviour
             {
                 isAttacking2 = true;
             }
+            deActivateAllatk();
         }
 
         if (Input.GetButtonDown("Range") && isGround())

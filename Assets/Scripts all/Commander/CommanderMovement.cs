@@ -5,6 +5,7 @@ using UnityEngine;
 public class CommanderMovement : MonoBehaviour
 {
     // All the require Components
+    [SerializeField] public Collider2D collision;
     public HealthDecrease health;
     private Rigidbody2D rb2D;
     private Animator  anim;
@@ -38,6 +39,9 @@ public class CommanderMovement : MonoBehaviour
         moveHorizontal = Input.GetAxisRaw("Horizontal");
         controlMove();
         UpdateAnimationMove();
+        // if(health.die == true){
+        //     DeCollision();
+        // }
     }
 
     #region Movement
@@ -127,6 +131,10 @@ public class CommanderMovement : MonoBehaviour
         }
 
         anim.SetInteger("state", (int)state);
+    }
+
+    public void DeCollision(){
+        collision.enabled = false;
     }
 
     #endregion

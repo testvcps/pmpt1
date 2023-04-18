@@ -15,7 +15,9 @@ TagManager:
   - Aarrow
   - Trap
   - Ground
-  - BCommander
+  - Health
+  - Fruits
+  - Samurai
   layers:
   - Default
   - TransparentFX

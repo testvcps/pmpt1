@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerMovement : MonoBehaviour
 {
     // All the require Components
+    [SerializeField] public Collider2D collision;
+    public HealthDecrease health;
     private Rigidbody2D rb2D;
     private Animator  anim;
     private SpriteRenderer characterSprite;
@@ -25,6 +27,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        collision = GetComponent<Collider2D>();
         rb2D = GetComponent<Rigidbody2D>();
         anim = GetComponent<Animator>();
         characterSprite = GetComponent<SpriteRenderer>();
@@ -37,6 +40,9 @@ public class PlayerMovement : MonoBehaviour
         moveHorizontal = Input.GetAxisRaw("Horizontal");
         controlMove();
         UpdateAnimationMove();
+        // if(health.die == true){
+        //     DeCollision();
+        // }
     }
 
     #region Movement
@@ -47,29 +53,37 @@ public class PlayerMovement : MonoBehaviour
         // Turn the character to the right from the left
         if (moveHorizontal > 0 && !isFacingRight)
         {
-            isFacingRight = !isFacingRight;
-            transform.Rotate(0f, 180f, 0f);
+            if(health.die == false){
+                isFacingRight = !isFacingRight;
+                transform.Rotate(0f, 180f, 0f);
+            }
         }
         // and reverse
         else if (moveHorizontal < 0 && isFacingRight)
         {
-            isFacingRight = !isFacingRight;
-            transform.Rotate(0f, 180f, 0f);
+            if(health.die == false){
+                isFacingRight = !isFacingRight;
+                transform.Rotate(0f, 180f, 0f);
+            }
         }
 
         // Switch between walk and run speed
         if (Input.GetKey(KeyCode.LeftShift) || Input.GetKey(KeyCode.RightShift))
         {
-            rb2D.velocity = new Vector2(moveHorizontal * walkSpeed, rb2D.velocity.y);
+            if(health.die == false){
+                rb2D.velocity = new Vector2(moveHorizontal * walkSpeed, rb2D.velocity.y);
+            }
         }
         else
-        {
-            rb2D.velocity = new Vector2(moveHorizontal * runSpeed, rb2D.velocity.y);
+        {   if(health.die == false){
+                rb2D.velocity = new Vector2(moveHorizontal * runSpeed, rb2D.velocity.y);
+            }
         }
 
         if (Input.GetButtonDown("Jump") && isGround())
-        {
-            rb2D.velocity = new Vector2(0, jumpForce);
+        {   if(health.die == false){
+                rb2D.velocity = new Vector2(0, jumpForce);
+            }
         }
     }
 
@@ -118,6 +132,10 @@ public class PlayerMovement : MonoBehaviour
         }
 
         anim.SetInteger("state", (int)state);
+    }
+
+    public void DeCollision(){
+        collision.enabled = false;
     }
 
     #endregion

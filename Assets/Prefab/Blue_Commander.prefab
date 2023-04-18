@@ -392,6 +392,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52fe93f5c46584a43a69cb6bea55194e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collision: {fileID: 2794962744474070063}
   health: {fileID: 2794962744474070051}
   checkCollision: {fileID: 2794962743410314401}
   rayBuffer: 0.2
