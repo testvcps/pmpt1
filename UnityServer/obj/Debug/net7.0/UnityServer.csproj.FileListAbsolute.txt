@@ -1,5 +1,0 @@
-C:\Users\Tran Gia Huy\source\repos\ByteBuffer\UnityServer\obj\Debug\net7.0\UnityServer.csproj.AssemblyReference.cache
-C:\Users\Tran Gia Huy\source\repos\ByteBuffer\UnityServer\obj\Debug\net7.0\UnityServer.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\Tran Gia Huy\source\repos\ByteBuffer\UnityServer\obj\Debug\net7.0\UnityServer.AssemblyInfoInputs.cache
-C:\Users\Tran Gia Huy\source\repos\ByteBuffer\UnityServer\obj\Debug\net7.0\UnityServer.AssemblyInfo.cs
-C:\Users\Tran Gia Huy\source\repos\ByteBuffer\UnityServer\obj\Debug\net7.0\UnityServer.csproj.CoreCompileInputs.cache
